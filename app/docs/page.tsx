@@ -65,7 +65,7 @@ export default function DocsPage() {
                 <p className="text-gray-600 mb-4">
                   Example of initiating a payment from a React component.
                 </p>
-                <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                   <code>
 {`
 const initiatePayment = async (paymentDetails) => {
@@ -105,7 +105,7 @@ const initiatePayment = async (paymentDetails) => {
                     <p className="text-gray-600 mb-4">
                       Encrypting the payment data before sending to SkillPay.
                     </p>
-                    <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                    <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                       <code>
 {`
 import javax.crypto.Cipher;
@@ -142,7 +142,7 @@ public class SkillPayCrypto {
                     <p className="text-gray-600 mb-4">
                       Decrypting the response from SkillPay.
                     </p>
-                    <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                    <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                       <code>
 {`
 public String decrypt(String encryptedData) throws Exception {

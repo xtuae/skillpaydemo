@@ -1,0 +1,245 @@
+'use client';
+
+import { useState } from 'react';
+import { CreditCard, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+
+export default function Home() {
+  const [formData, setFormData] = useState({
+    amount: '',
+    contactNo: '',
+    emailId: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [qrCode, setQrCode] = useState<string>('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate form
+    if (!formData.amount || !formData.contactNo || !formData.emailId) {
+      toast.error('Please fill all fields');
+      return;
+    }
+
+    if (formData.contactNo.length !== 10) {
+      toast.error('Contact number must be 10 digits');
+      return;
+    }
+
+    setLoading(true);
+    setPaymentResult(null);
+
+    try {
+      const response = await axios.post('/api/payment/init', formData);
+      
+      if (response.data.success) {
+        setPaymentResult(response.data.data);
+        setQrCode(response.data.data.qrString);
+        toast.success('Payment initiated successfully!');
+        
+        // Start polling for payment status
+        pollPaymentStatus(response.data.data.custRefNum);
+      } else {
+        toast.error('Failed to initiate payment');
+      }
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      toast.error(error.response?.data?.error || 'Failed to initiate payment');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pollPaymentStatus = async (custRefNum: string) => {
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await axios.get(`/api/payment/status?custRefNum=${custRefNum}`);
+        
+        if (response.data.success) {
+          const status = response.data.data.pay_status;
+          
+          if (status === 'Ok') {
+            clearInterval(pollInterval);
+            toast.success('Payment completed successfully!');
+            setPaymentResult(response.data.data);
+          } else if (status === 'F') {
+            clearInterval(pollInterval);
+            toast.error('Payment failed!');
+            setPaymentResult(response.data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Status polling error:', error);
+      }
+    }, 5000); // Poll every 5 seconds
+
+    // Stop polling after 5 minutes
+    setTimeout(() => {
+      clearInterval(pollInterval);
+    }, 300000);
+  };
+
+  return (
+    <div className="px-4 py-5 sm:p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white overflow-hidden shadow-xl rounded-lg">
+          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-5 sm:px-6">
+            <h3 className="text-2xl leading-6 font-bold text-white flex items-center">
+              <CreditCard className="mr-3" size={28} />
+              Make a Payment
+            </h3>
+            <p className="mt-1 text-indigo-100">
+              Enter your details to initiate a UPI payment
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="px-4 py-5 sm:p-6">
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
+                  Amount (₹)
+                </label>
+                <input
+                  type="number"
+                  name="amount"
+                  id="amount"
+                  value={formData.amount}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 border"
+                  placeholder="Enter amount"
+                  step="0.01"
+                  min="1"
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="contactNo" className="block text-sm font-medium text-gray-700">
+                  Mobile Number
+                </label>
+                <input
+                  type="tel"
+                  name="contactNo"
+                  id="contactNo"
+                  value={formData.contactNo}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 border"
+                  placeholder="10 digit mobile number"
+                  pattern="[0-9]{10}"
+                  maxLength={10}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="emailId" className="block text-sm font-medium text-gray-700">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="emailId"
+                  id="emailId"
+                  value={formData.emailId}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 border"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Processing...
+                  </>
+                ) : (
+                  'Initiate Payment'
+                )}
+              </button>
+            </div>
+          </form>
+
+          {paymentResult && (
+            <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+              <h4 className="text-lg font-medium text-gray-900 mb-4">Payment Status</h4>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center mb-3">
+                  {paymentResult.pay_status === 'Ok' ? (
+                    <CheckCircle className="text-green-500 mr-2" size={24} />
+                  ) : paymentResult.pay_status === 'F' ? (
+                    <XCircle className="text-red-500 mr-2" size={24} />
+                  ) : (
+                    <Loader2 className="animate-spin text-yellow-500 mr-2" size={24} />
+                  )}
+                  <span className={`font-semibold ${
+                    paymentResult.pay_status === 'Ok' ? 'text-green-700' :
+                    paymentResult.pay_status === 'F' ? 'text-red-700' :
+                    'text-yellow-700'
+                  }`}>
+                    {paymentResult.pay_status === 'Ok' ? 'Payment Successful' :
+                     paymentResult.pay_status === 'F' ? 'Payment Failed' :
+                     'Payment Pending'}
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-600">Reference Number:</span>
+                    <span className="ml-2 text-gray-900">{paymentResult.custRefNum}</span>
+                  </div>
+                  {paymentResult.aggRefNo && (
+                    <div>
+                      <span className="font-medium text-gray-600">Transaction ID:</span>
+                      <span className="ml-2 text-gray-900">{paymentResult.aggRefNo}</span>
+                    </div>
+                  )}
+                  {paymentResult.respMessage && (
+                    <div>
+                      <span className="font-medium text-gray-600">Message:</span>
+                      <span className="ml-2 text-gray-900">{paymentResult.respMessage}</span>
+                    </div>
+                  )}
+                </div>
+
+                {qrCode && paymentResult.pay_status === 'PPPP' && (
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-600 mb-2">
+                      Scan QR code or click the link below to complete payment:
+                    </p>
+                    <a
+                      href={qrCode}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Open UPI App
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

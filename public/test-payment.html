@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillPay Payment Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4F46E5;
+            text-align: center;
+        }
+        .info {
+            background: #EEF2FF;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .credentials {
+            background: #F3F4F6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid #4F46E5;
+            padding-left: 20px;
+        }
+        .button {
+            display: inline-block;
+            background: #4F46E5;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #4338CA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SkillPay Payment Integration Demo</h1>
+        
+        <div class="info">
+            <h2>Test Payment Flow</h2>
+            <p>This demo application integrates with SkillPay's payment gateway for seamless UPI payments.</p>
+        </div>
+
+        <div class="credentials">
+            <h3>API Credentials (Already Configured)</h3>
+            <p>AuthID: M00006572</p>
+            <p>AuthKey: Qv0rg4oN8cS9sm6PS3rr6fu7MN2FB0Oo</p>
+        </div>
+
+        <h3>How to Test:</h3>
+        
+        <div class="step">
+            <strong>Step 1: Make a Payment</strong>
+            <p>Navigate to the home page and enter:</p>
+            <ul>
+                <li>Amount (any amount in INR)</li>
+                <li>Mobile Number (10 digits)</li>
+                <li>Email Address</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Step 2: Complete Payment</strong>
+            <p>After initiating payment, you'll receive a UPI deep link. Click "Open UPI App" or use the QR string to complete the payment.</p>
+        </div>
+
+        <div class="step">
+            <strong>Step 3: Check Status</strong>
+            <p>The application will automatically poll for payment status and update the UI when payment is completed.</p>
+        </div>
+
+        <div class="step">
+            <strong>Step 4: View Transactions</strong>
+            <p>Navigate to the Transactions page to see all payment history with detailed information.</p>
+        </div>
+
+        <h3>Test Data:</h3>
+        <div class="info">
+            <p><strong>Sample Mobile:</strong> 9876543210</p>
+            <p><strong>Sample Email:</strong> test@example.com</p>
+            <p><strong>Sample Amount:</strong> 100.00</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/" class="button">Start Testing</a>
+            <a href="/transactions" class="button">View Transactions</a>
+        </div>
+
+        <div class="info" style="margin-top: 30px;">
+            <h3>Important Notes:</h3>
+            <ul>
+                <li>This is a demo application for testing purposes</li>
+                <li>Actual payment will be processed through SkillPay's live API</li>
+                <li>Make sure to set up your Neon database before testing</li>
+                <li>Check the browser console for any errors</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

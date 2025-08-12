@@ -82,6 +82,8 @@ export async function POST(request: NextRequest) {
       }
     );
 
+    console.log('SkillPay API Response:', response.data);
+
     // Decrypt response
     const decryptedResponse = SkillPayCrypto.decrypt(response.data.respData) as DecryptedResponse;
 

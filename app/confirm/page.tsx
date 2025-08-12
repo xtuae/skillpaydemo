@@ -6,11 +6,19 @@ import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+interface PaymentResult {
+  custRefNum: string;
+  aggRefNo?: string;
+  pay_status: 'Ok' | 'F' | 'PPPP';
+  respMessage?: string;
+  qrString?: string;
+}
+
 export default function ConfirmPage() {
   const searchParams = useSearchParams();
   const [upiId, setUpiId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
   const [qrCode, setQrCode] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 

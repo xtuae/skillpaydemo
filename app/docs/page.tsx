@@ -181,8 +181,8 @@ public class SkillPayCrypto {
                           <tr><td className="px-6 py-4 whitespace-nowrap">IntegrationType</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">"seamless" or "nonseamless"</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">CallbackURL</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A Unique URL provided by the merchant to post the response</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">MOP</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">The mode of transaction (e.g., "UPI")</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
-                          <tr><td className="px-6 py-4 whitespace-nowrap">MOPDetails</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">For UPI txn pass - “I”</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
-                          <tr><td className="px-6 py-4 whitespace-nowrap">MOPType</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">For UPI txn pass – “UPI”</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
+                          <tr><td className="px-6 py-4 whitespace-nowrap">MOPDetails</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">For UPI txn pass - "I"</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
+                          <tr><td className="px-6 py-4 whitespace-nowrap">MOPType</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">For UPI txn pass – "UPI"</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                         </tbody>
                       </table>
                     </div>

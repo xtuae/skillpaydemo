@@ -16,6 +16,20 @@ interface DecryptedResponse {
 
 export async function POST(request: NextRequest) {
   try {
+    const {
+      NEXT_PUBLIC_SKILLPAY_AUTH_ID,
+      NEXT_PUBLIC_SKILLPAY_AUTH_KEY,
+      NEXT_PUBLIC_APP_URL,
+      NEXT_PUBLIC_SKILLPAY_API_URL
+    } = process.env;
+
+    if (!NEXT_PUBLIC_SKILLPAY_AUTH_ID || !NEXT_PUBLIC_SKILLPAY_AUTH_KEY || !NEXT_PUBLIC_APP_URL || !NEXT_PUBLIC_SKILLPAY_API_URL) {
+      return NextResponse.json(
+        { error: 'Missing required environment variables' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { amount, contactNo, emailId } = body;
 

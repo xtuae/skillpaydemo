@@ -5,6 +5,14 @@ import { CreditCard, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+interface PaymentResult {
+  custRefNum: string;
+  aggRefNo?: string;
+  pay_status: 'Ok' | 'F' | 'PPPP';
+  respMessage?: string;
+  qrString?: string;
+}
+
 export default function Home() {
   const [formData, setFormData] = useState({
     amount: '',
@@ -12,7 +20,7 @@ export default function Home() {
     emailId: ''
   });
   const [loading, setLoading] = useState(false);
-  const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
   const [qrCode, setQrCode] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +61,13 @@ export default function Home() {
       } else {
         toast.error('Failed to initiate payment');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Payment error:', error);
-      toast.error(error.response?.data?.error || 'Failed to initiate payment');
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.error || 'Failed to initiate payment');
+      } else {
+        toast.error('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }

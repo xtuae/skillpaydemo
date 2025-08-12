@@ -6,10 +6,33 @@ import { ArrowLeft, CheckCircle, XCircle, Clock, RefreshCw } from 'lucide-react'
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+interface Transaction {
+  cust_ref_num?: string;
+  CustRefNum?: string;
+  agg_ref_no?: string;
+  AggRefNo?: string;
+  pay_status?: string;
+  payStatus?: string;
+  amount?: number;
+  PayAmount?: number;
+  email_id?: string;
+  EmailId?: string;
+  contact_no?: string;
+  ContactNo?: string;
+  payment_date?: string;
+  PaymentDate?: string;
+  mop?: string;
+  MOP?: string;
+  resp_code?: string;
+  service_rrn?: string;
+  serviceRRN?: string;
+  resp_message?: string;
+}
+
 export default function TransactionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [transaction, setTransaction] = useState<any>(null);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -142,7 +165,7 @@ export default function TransactionDetailPage() {
               <div className="border-b pb-4">
                 <p className="text-sm font-medium text-gray-500">Amount</p>
                 <p className="mt-1 text-2xl font-bold text-gray-900">
-                  {formatAmount(transaction.amount || transaction.PayAmount)}
+                  {formatAmount(transaction.amount || transaction.PayAmount || 0)}
                 </p>
               </div>
 
@@ -170,7 +193,7 @@ export default function TransactionDetailPage() {
               <div className="border-b pb-4">
                 <p className="text-sm font-medium text-gray-500">Payment Date</p>
                 <p className="mt-1 text-sm text-gray-900">
-                  {formatDate(transaction.payment_date || transaction.PaymentDate)}
+                  {formatDate(transaction.payment_date || transaction.PaymentDate || new Date().toISOString())}
                 </p>
               </div>
 

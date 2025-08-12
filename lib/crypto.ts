@@ -23,7 +23,7 @@ export class SkillPayCrypto {
     }
   }
 
-  static decrypt(encryptedData: string): any {
+  static decrypt(encryptedData: string): unknown {
     try {
       const key = CryptoJS.enc.Utf8.parse(this.authKey);
       const iv = CryptoJS.enc.Utf8.parse(this.iv);

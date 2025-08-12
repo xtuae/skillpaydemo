@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SkillPayCrypto } from '@/lib/crypto';
 import { updateTransactionStatus } from '@/lib/db';
 
+interface DecryptedData {
+  CustRefNum: string;
+  payStatus: string;
+  resp_code: string;
+  resp_message: string;
+  serviceRRN: string;
+  payrespDate?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -9,7 +18,7 @@ export async function POST(request: NextRequest) {
     // Check if response contains encrypted data
     if (body.respData) {
       // Decrypt the response
-      const decryptedData = SkillPayCrypto.decrypt(body.respData);
+      const decryptedData = SkillPayCrypto.decrypt(body.respData) as DecryptedData;
       
       // Update transaction in database
       await updateTransactionStatus(decryptedData.CustRefNum, {

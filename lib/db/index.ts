@@ -1,4 +1,4 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 import * as demo from './demo';
 
 // Check if we have a valid database URL
@@ -24,14 +24,14 @@ export interface Transaction {
   updated_at?: Date;
 }
 
-let sql: any = null;
+let sql: NeonQueryFunction<false, false> | null = null;
 
 if (!isDemoMode) {
   sql = neon(process.env.DATABASE_URL!);
 }
 
 export async function createTransaction(transaction: Omit<Transaction, 'id' | 'created_at' | 'updated_at'>) {
-  if (isDemoMode) {
+  if (isDemoMode || !sql) {
     console.log('Demo mode: Creating transaction');
     return demo.createTransaction(transaction);
   }
@@ -64,7 +64,7 @@ export async function createTransaction(transaction: Omit<Transaction, 'id' | 'c
 }
 
 export async function getTransactionByRefNum(custRefNum: string) {
-  if (isDemoMode) {
+  if (isDemoMode || !sql) {
     return demo.getTransactionByRefNum(custRefNum);
   }
   
@@ -75,7 +75,7 @@ export async function getTransactionByRefNum(custRefNum: string) {
 }
 
 export async function getAllTransactions() {
-  if (isDemoMode) {
+  if (isDemoMode || !sql) {
     return demo.getAllTransactions();
   }
   
@@ -89,7 +89,7 @@ export async function updateTransactionStatus(
   custRefNum: string,
   updates: Partial<Transaction>
 ) {
-  if (isDemoMode) {
+  if (isDemoMode || !sql) {
     return demo.updateTransactionStatus(custRefNum, updates);
   }
   

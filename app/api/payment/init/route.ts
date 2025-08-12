@@ -3,6 +3,17 @@ import { SkillPayCrypto, generateCustRefNum, formatPaymentDate } from '@/lib/cry
 import { createTransaction } from '@/lib/db';
 import axios from 'axios';
 
+interface DecryptedResponse {
+  AggRefNo: string;
+  payStatus: string;
+  resp_code: string;
+  resp_message: string;
+  serviceRRN: string;
+  MOP: string;
+  qrString: string;
+  payrespDate?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -58,7 +69,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Decrypt response
-    const decryptedResponse = SkillPayCrypto.decrypt(response.data.respData);
+    const decryptedResponse = SkillPayCrypto.decrypt(response.data.respData) as DecryptedResponse;
 
     // Save transaction to database
     await createTransaction({

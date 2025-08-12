@@ -1,17 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { CreditCard, Loader2 } from 'lucide-react';
+import { CreditCard, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+interface PaymentResult {
+  custRefNum: string;
+  aggRefNo?: string;
+  pay_status: 'Ok' | 'F' | 'PPPP';
+  respMessage?: string;
+  qrString?: string;
+}
 
 export default function Home() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     amount: '',
     contactNo: '',
     emailId: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
+  const [qrCode, setQrCode] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,9 +32,10 @@ export default function Home() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate form
     if (!formData.amount || !formData.contactNo || !formData.emailId) {
       toast.error('Please fill all fields');
       return;
@@ -34,13 +46,65 @@ export default function Home() {
       return;
     }
 
-    const formattedAmount = parseFloat(formData.amount).toFixed(2);
-    const query = new URLSearchParams({
-      ...formData,
-      amount: formattedAmount,
-    }).toString();
-    
-    router.push(`/confirm?${query}`);
+    setLoading(true);
+    setPaymentResult(null);
+    setError(null);
+
+    try {
+      const response = await axios.post('/api/payment/init', formData);
+      
+      if (response.data.success) {
+        setPaymentResult(response.data.data);
+        setQrCode(response.data.data.qrString);
+        toast.success('Payment initiated successfully!');
+        
+        // Start polling for payment status
+        pollPaymentStatus(response.data.data.custRefNum);
+      } else {
+        toast.error('Failed to initiate payment');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || 'Failed to initiate payment';
+        toast.error(errorMessage);
+        setError(errorMessage);
+      } else {
+        toast.error('An unexpected error occurred');
+        setError('An unexpected error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pollPaymentStatus = async (custRefNum: string) => {
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await axios.get(`/api/payment/status?custRefNum=${custRefNum}`);
+        
+        if (response.data.success) {
+          const status = response.data.data.pay_status;
+          
+          if (status === 'Ok') {
+            clearInterval(pollInterval);
+            toast.success('Payment completed successfully!');
+            setPaymentResult(response.data.data);
+          } else if (status === 'F') {
+            clearInterval(pollInterval);
+            toast.error('Payment failed!');
+            setPaymentResult(response.data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Status polling error:', error);
+      }
+    }, 5000); // Poll every 5 seconds
+
+    // Stop polling after 5 minutes
+    setTimeout(() => {
+      clearInterval(pollInterval);
+    }, 300000);
   };
 
   return (
@@ -115,12 +179,91 @@ export default function Home() {
             <div className="mt-6">
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Proceed to Confirmation
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Processing...
+                  </>
+                ) : (
+                  'Initiate Payment'
+                )}
               </button>
             </div>
           </form>
+
+          {paymentResult && (
+            <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+              <h4 className="text-lg font-medium text-gray-900 mb-4">Payment Status</h4>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center mb-3">
+                  {paymentResult.pay_status === 'Ok' ? (
+                    <CheckCircle className="text-green-500 mr-2" size={24} />
+                  ) : paymentResult.pay_status === 'F' ? (
+                    <XCircle className="text-red-500 mr-2" size={24} />
+                  ) : (
+                    <Loader2 className="animate-spin text-yellow-500 mr-2" size={24} />
+                  )}
+                  <span className={`font-semibold ${
+                    paymentResult.pay_status === 'Ok' ? 'text-green-700' :
+                    paymentResult.pay_status === 'F' ? 'text-red-700' :
+                    'text-yellow-700'
+                  }`}>
+                    {paymentResult.pay_status === 'Ok' ? 'Payment Successful' :
+                     paymentResult.pay_status === 'F' ? 'Payment Failed' :
+                     'Payment Pending'}
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-600">Reference Number:</span>
+                    <span className="ml-2 text-gray-900">{paymentResult.custRefNum}</span>
+                  </div>
+                  {paymentResult.aggRefNo && (
+                    <div>
+                      <span className="font-medium text-gray-600">Transaction ID:</span>
+                      <span className="ml-2 text-gray-900">{paymentResult.aggRefNo}</span>
+                    </div>
+                  )}
+                  {paymentResult.respMessage && (
+                    <div>
+                      <span className="font-medium text-gray-600">Message:</span>
+                      <span className="ml-2 text-gray-900">{paymentResult.respMessage}</span>
+                    </div>
+                  )}
+                </div>
+
+                {qrCode && paymentResult.pay_status === 'PPPP' && (
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-600 mb-2">
+                      Scan QR code or click the link below to complete payment:
+                    </p>
+                    <a
+                      href={qrCode}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Open UPI App
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+              <h4 className="text-lg font-medium text-red-600 mb-4">Error Details</h4>
+              <div className="bg-red-50 rounded-lg p-4">
+                <pre className="text-sm text-red-700 whitespace-pre-wrap">{error}</pre>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

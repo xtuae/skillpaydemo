@@ -157,7 +157,7 @@ public class SkillPayCrypto {
                   <div>
                     <h3 className="text-xl font-medium text-gray-800 mb-2">Authorization Request</h3>
                     <p className="text-gray-600 mb-4">
-                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded">https://dashboard.skill-pay.in/pay/paymentinit</code><br />
+                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded text-gray-800">https://dashboard.skill-pay.in/pay/paymentinit</code><br />
                       <span className="font-semibold">Method:</span> POST
                     </p>
                     <div className="overflow-x-auto">
@@ -170,7 +170,7 @@ public class SkillPayCrypto {
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mandatory</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-gray-800">
                           <tr><td className="px-6 py-4 whitespace-nowrap">AuthID</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A Unique AuthID provided by aggregator</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">AuthKey</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A unique AuthKey key provided by aggregator</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">CustRefNum</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A unique tracking id created by the merchant for each transaction</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
@@ -191,7 +191,7 @@ public class SkillPayCrypto {
                   <div>
                     <h3 className="text-xl font-medium text-gray-800 mb-2">Transaction Status Query</h3>
                     <p className="text-gray-600 mb-4">
-                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded">https://dashboard.skill-pay.in/pay/statusenquiry</code><br />
+                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded text-gray-800">https://dashboard.skill-pay.in/pay/statusenquiry</code><br />
                       <span className="font-semibold">Method:</span> POST
                     </p>
                     <div className="overflow-x-auto">
@@ -204,7 +204,7 @@ public class SkillPayCrypto {
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mandatory</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-gray-800">
                           <tr><td className="px-6 py-4 whitespace-nowrap">AuthID</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A Unique AuthID provide by</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">CustRefNum</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A unique tracking id created by the merchant for each transaction</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                         </tbody>
@@ -229,7 +229,7 @@ public class SkillPayCrypto {
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-gray-800">
                           <tr><td className="px-6 py-4 whitespace-nowrap">payStatus</td><td className="px-6 py-4">Transaction Status (e.g., "Pending")</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">qrString</td><td className="px-6 py-4">Deeplink for transaction</td></tr>
                         </tbody>
@@ -246,7 +246,7 @@ public class SkillPayCrypto {
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-gray-800">
                           <tr><td className="px-6 py-4 whitespace-nowrap">payStatus</td><td className="px-6 py-4">OK (Success), F (Failed), PPPP (Pending)</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">resp_code</td><td className="px-6 py-4">Response Code (e.g., "00000" for success)</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">resp_message</td><td className="px-6 py-4">Response Message</td></tr>

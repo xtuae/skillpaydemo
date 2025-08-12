@@ -67,8 +67,7 @@ export default function DocsPage() {
                 </p>
                 <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                   <code>
-{`
-const initiatePayment = async (paymentDetails) => {
+{`const initiatePayment = async (paymentDetails) => {
   try {
     const response = await fetch('/api/payment/init', {
       method: 'POST',
@@ -77,11 +76,8 @@ const initiatePayment = async (paymentDetails) => {
       },
       body: JSON.stringify(paymentDetails),
     });
-
     const data = await response.json();
-
     if (data.success) {
-      // Display QR code and handle payment status
       console.log('QR Code String:', data.data.qrString);
     } else {
       console.error('Payment initiation failed:', data.error);
@@ -89,8 +85,7 @@ const initiatePayment = async (paymentDetails) => {
   } catch (error) {
     console.error('An error occurred:', error);
   }
-};
-`}
+};`}
                   </code>
                 </pre>
               </section>
@@ -107,8 +102,7 @@ const initiatePayment = async (paymentDetails) => {
                     </p>
                     <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                       <code>
-{`
-import javax.crypto.Cipher;
+{`import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
@@ -131,8 +125,7 @@ public class SkillPayCrypto {
         byte[] encrypted = cipher.doFinal(data.getBytes());
         return Base64.getEncoder().encodeToString(encrypted);
     }
-}
-`}
+}`}
                       </code>
                     </pre>
                   </div>
@@ -144,14 +137,12 @@ public class SkillPayCrypto {
                     </p>
                     <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
                       <code>
-{`
-public String decrypt(String encryptedData) throws Exception {
+{`public String decrypt(String encryptedData) throws Exception {
     Cipher cipher = Cipher.getInstance(ALGORITHM);
     cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, iv);
     byte[] original = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
     return new String(original);
-}
-`}
+}`}
                       </code>
                     </pre>
                   </div>
@@ -166,7 +157,7 @@ public String decrypt(String encryptedData) throws Exception {
                   <div>
                     <h3 className="text-xl font-medium text-gray-800 mb-2">Authorization Request</h3>
                     <p className="text-gray-600 mb-4">
-                      <span className="font-semibold">URL:</span> <code className="bg-gray-100 p-1 rounded">https://dashboard.skill-pay.in/pay/paymentinit</code><br />
+                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded">https://dashboard.skill-pay.in/pay/paymentinit</code><br />
                       <span className="font-semibold">Method:</span> POST
                     </p>
                     <div className="overflow-x-auto">
@@ -200,7 +191,7 @@ public String decrypt(String encryptedData) throws Exception {
                   <div>
                     <h3 className="text-xl font-medium text-gray-800 mb-2">Transaction Status Query</h3>
                     <p className="text-gray-600 mb-4">
-                      <span className="font-semibold">URL:</span> <code className="bg-gray-100 p-1 rounded">https://dashboard.skill-pay.in/pay/statusenquiry</code><br />
+                      <span className="font-semibold">URL:</span> <code className="bg-gray-200 p-1 rounded">https://dashboard.skill-pay.in/pay/statusenquiry</code><br />
                       <span className="font-semibold">Method:</span> POST
                     </p>
                     <div className="overflow-x-auto">
@@ -216,6 +207,49 @@ public String decrypt(String encryptedData) throws Exception {
                         <tbody className="bg-white divide-y divide-gray-200">
                           <tr><td className="px-6 py-4 whitespace-nowrap">AuthID</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A Unique AuthID provide by</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
                           <tr><td className="px-6 py-4 whitespace-nowrap">CustRefNum</td><td className="px-6 py-4 whitespace-nowrap">String</td><td className="px-6 py-4">A unique tracking id created by the merchant for each transaction</td><td className="px-6 py-4 whitespace-nowrap">Yes</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="mb-12">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                  Response Parameters
+                </h2>
+                <div className="space-y-8">
+                  <div>
+                    <h3 className="text-xl font-medium text-gray-800 mb-2">Decrypted Response (Initial)</h3>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attribute</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          <tr><td className="px-6 py-4 whitespace-nowrap">payStatus</td><td className="px-6 py-4">Transaction Status (e.g., "Pending")</td></tr>
+                          <tr><td className="px-6 py-4 whitespace-nowrap">qrString</td><td className="px-6 py-4">Deeplink for transaction</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-medium text-gray-800 mb-2">Final Response (Callback)</h3>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attribute</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          <tr><td className="px-6 py-4 whitespace-nowrap">payStatus</td><td className="px-6 py-4">OK (Success), F (Failed), PPPP (Pending)</td></tr>
+                          <tr><td className="px-6 py-4 whitespace-nowrap">resp_code</td><td className="px-6 py-4">Response Code (e.g., "00000" for success)</td></tr>
+                          <tr><td className="px-6 py-4 whitespace-nowrap">resp_message</td><td className="px-6 py-4">Response Message</td></tr>
                         </tbody>
                       </table>
                     </div>

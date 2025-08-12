@@ -3,11 +3,11 @@
   "outputDirectory": ".next",
   "framework": "nextjs",
   "env": {
-    "DATABASE_URL": "@database_url",
-    "NEXT_PUBLIC_SKILLPAY_AUTH_ID": "@next_public_skillpay_auth_id",
-    "NEXT_PUBLIC_SKILLPAY_AUTH_KEY": "@next_public_skillpay_auth_key",
-    "NEXT_PUBLIC_SKILLPAY_API_URL": "@next_public_skillpay_api_url",
-    "NEXT_PUBLIC_APP_URL": "@next_public_app_url"
+    "DATABASE_URL": "postgres://neondb_owner:npg_wpDNCEe97xBi@ep-round-rice-adl20x6k-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require",
+    "NEXT_PUBLIC_SKILLPAY_AUTH_ID": "M00006572",
+    "NEXT_PUBLIC_SKILLPAY_AUTH_KEY": "Qv0rg4oN8cS9sm6PS3rr6fu7MN2FB0Oo",
+    "NEXT_PUBLIC_SKILLPAY_API_URL": "https://dashboard.skill-pay.in/pay",
+    "NEXT_PUBLIC_APP_URL": "https://skillpaydemo.vercel.app"
   },
   "functions": {
     "app/api/payment/init/route.ts": {

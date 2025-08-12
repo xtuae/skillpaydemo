@@ -102,6 +102,12 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Payment initialization error:', error);
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(
+        { error: `SkillPay API Error: ${error.response.data?.resp_message || error.message}` },
+        { status: error.response.status }
+      );
+    }
     return NextResponse.json(
       { error: 'Failed to initialize payment' },
       { status: 500 }

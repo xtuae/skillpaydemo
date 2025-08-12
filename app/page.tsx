@@ -22,6 +22,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
   const [qrCode, setQrCode] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,6 +48,7 @@ export default function Home() {
 
     setLoading(true);
     setPaymentResult(null);
+    setError(null);
 
     try {
       const response = await axios.post('/api/payment/init', formData);
@@ -64,9 +66,12 @@ export default function Home() {
     } catch (error) {
       console.error('Payment error:', error);
       if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.error || 'Failed to initiate payment');
+        const errorMessage = error.response?.data?.error || 'Failed to initiate payment';
+        toast.error(errorMessage);
+        setError(errorMessage);
       } else {
         toast.error('An unexpected error occurred');
+        setError('An unexpected error occurred');
       }
     } finally {
       setLoading(false);
@@ -247,6 +252,15 @@ export default function Home() {
                     </a>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+              <h4 className="text-lg font-medium text-red-600 mb-4">Error Details</h4>
+              <div className="bg-red-50 rounded-lg p-4">
+                <pre className="text-sm text-red-700 whitespace-pre-wrap">{error}</pre>
               </div>
             </div>
           )}

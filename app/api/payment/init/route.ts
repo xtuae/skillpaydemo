@@ -103,13 +103,16 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Payment initialization error:', error);
     if (axios.isAxiosError(error) && error.response) {
+      console.error('SkillPay API Error:', error.response.data);
       return NextResponse.json(
         { error: `SkillPay API Error: ${error.response.data?.resp_message || error.message}` },
         { status: error.response.status }
       );
     }
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    console.error('Generic Error:', errorMessage);
     return NextResponse.json(
-      { error: 'Failed to initialize payment' },
+      { error: `Failed to initialize payment: ${errorMessage}` },
       { status: 500 }
     );
   }

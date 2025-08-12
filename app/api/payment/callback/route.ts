@@ -17,8 +17,10 @@ export async function POST(request: NextRequest) {
     
     // Check if response contains encrypted data
     if (body.respData) {
+      console.log('Encrypted Callback Data:', body.respData);
       // Decrypt the response
       const decryptedData = SkillPayCrypto.decrypt(body.respData) as DecryptedData;
+      console.log('Decrypted Callback Data:', decryptedData);
       
       // Update transaction in database
       await updateTransactionStatus(decryptedData.CustRefNum, {

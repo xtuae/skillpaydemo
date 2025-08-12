@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { amount, contactNo, emailId } = body;
+    const { amount, contactNo, emailId, upiId } = body;
 
     // Validate input
     if (!amount || !contactNo || !emailId) {
@@ -61,11 +61,12 @@ export async function POST(request: NextRequest) {
       adf3: "NA",
       MOP: "UPI",
       MOPType: "UPI",
-      MOPDetails: "I"
+      MOPDetails: upiId || "I"
     };
 
     // Encrypt the data
     const encData = SkillPayCrypto.encrypt(paymentData);
+    console.log('Encrypted Request Data:', encData);
 
     // Make API request to SkillPay
     let response;
@@ -92,6 +93,7 @@ export async function POST(request: NextRequest) {
 
     // Decrypt response
     const decryptedResponse = SkillPayCrypto.decrypt(response.data.respData) as DecryptedResponse;
+    console.log('Decrypted Response Data:', decryptedResponse);
 
     // Save transaction to database
     await createTransaction({

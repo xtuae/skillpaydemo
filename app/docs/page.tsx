@@ -20,43 +20,40 @@ export default function DocsPage() {
                 </h2>
                 <ol className="list-decimal list-inside space-y-4 text-gray-700">
                   <li>
-                    <span className="font-semibold">Frontend (React):</span> User fills out the payment form and clicks "Initiate Payment".
+                    <span className="font-semibold">Payment Init:</span> Application sends a POST request with encrypted JSON data to the server.
                   </li>
                   <li>
-                    <span className="font-semibold">Frontend to Backend:</span> The React application sends a POST request to your backend API (e.g., `/api/payment/init`) with the payment details.
+                    <span className="font-semibold">Server Receives Data:</span> Server receives the encrypted data.
                   </li>
                   <li>
-                    <span className="font-semibold">Backend:</span> Your server receives the request, validates the data, and prepares the payment payload for SkillPay.
+                    <span className="font-semibold">Decrypt Received Data:</span> Server decrypts the received data.
                   </li>
                   <li>
-                    <span className="font-semibold">Encryption (Backend):</span> The payment payload is encrypted using AES-256 with your SkillPay Auth Key.
+                    <span className="font-semibold">UPI Intent Page:</span> Application displays the required data and QR string from the decrypted response.
                   </li>
                   <li>
-                    <span className="font-semibold">Backend to SkillPay:</span> Your server sends a POST request to the SkillPay `paymentinit` endpoint with the encrypted data.
+                    <span className="font-semibold">Set User/Payer UPI ID:</span> User sets their UPI ID.
                   </li>
                   <li>
-                    <span className="font-semibold">SkillPay to Backend:</span> SkillPay processes the request and returns an encrypted response containing the payment details (including a QR code string).
+                    <span className="font-semibold">Send for Transaction:</span> User clicks the "Pay with UPI" button to initiate the transaction.
                   </li>
                   <li>
-                    <span className="font-semibold">Decryption (Backend):</span> Your server decrypts the response from SkillPay.
+                    <span className="font-semibold">Transaction Pending:</span> Server sends encrypted data in JSON format, and the transaction is now pending.
                   </li>
                   <li>
-                    <span className="font-semibold">Database (Backend):</span> The initial transaction details are saved to your database.
+                    <span className="font-semibold">Get Callback Data:</span> Application gets the encrypted callback data.
                   </li>
                   <li>
-                    <span className="font-semibold">Backend to Frontend:</span> Your server sends the decrypted data (especially the QR code) back to the React application.
+                    <span className="font-semibold">Decrypt Data (Success):</span> If the transaction is successful, the application decrypts the data.
                   </li>
                   <li>
-                    <span className="font-semibold">Frontend:</span> The React application displays the QR code and payment status to the user.
+                    <span className="font-semibold">Show Successful:</span> Application shows a success message and redirects to the transaction detail page.
                   </li>
                   <li>
-                    <span className="font-semibold">Polling:</span> The frontend starts polling your backend (`/api/payment/status`) to check for payment completion.
-                  </li>
-                   <li>
-                    <span className="font-semibold">Callback:</span> Once the user completes the payment, SkillPay sends a POST request to your configured callback URL (`/api/payment/callback`) with the final transaction status.
+                    <span className="font-semibold">Decrypt Data (Failed):</span> If the transaction fails, the application decrypts the data.
                   </li>
                   <li>
-                    <span className="font-semibold">Backend:</span> Your callback handler decrypts the data, verifies the transaction, and updates the payment status in your database.
+                    <span className="font-semibold">Show Failed:</span> Application shows a failure message and redirects to the transaction detail page.
                   </li>
                 </ol>
               </section>

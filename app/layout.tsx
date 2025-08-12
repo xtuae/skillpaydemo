@@ -33,6 +33,9 @@ export default function RootLayout({
                   <Link href="/transactions" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
                     Transactions
                   </Link>
+                  <Link href="/docs" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                    Docs
+                  </Link>
                 </div>
               </div>
             </div>

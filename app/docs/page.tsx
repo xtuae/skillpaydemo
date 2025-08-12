@@ -65,8 +65,8 @@ export default function DocsPage() {
                 <p className="text-gray-600 mb-4">
                   Example of initiating a payment from a React component.
                 </p>
-                <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
-                  <code>
+                <div className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
+                  <pre>
 {`const initiatePayment = async (paymentDetails) => {
   try {
     const response = await fetch('/api/payment/init', {
@@ -86,8 +86,8 @@ export default function DocsPage() {
     console.error('An error occurred:', error);
   }
 };`}
-                  </code>
-                </pre>
+                  </pre>
+                </div>
               </section>
 
               <section className="mb-12">
@@ -100,8 +100,8 @@ export default function DocsPage() {
                     <p className="text-gray-600 mb-4">
                       Encrypting the payment data before sending to SkillPay.
                     </p>
-                    <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
-                      <code>
+                    <div className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
+                      <pre>
 {`import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -126,8 +126,8 @@ public class SkillPayCrypto {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 }`}
-                      </code>
-                    </pre>
+                      </pre>
+                    </div>
                   </div>
 
                   <div>
@@ -135,16 +135,16 @@ public class SkillPayCrypto {
                     <p className="text-gray-600 mb-4">
                       Decrypting the response from SkillPay.
                     </p>
-                    <pre className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
-                      <code>
+                    <div className="bg-black text-white p-4 rounded-lg overflow-x-auto text-sm">
+                      <pre>
 {`public String decrypt(String encryptedData) throws Exception {
     Cipher cipher = Cipher.getInstance(ALGORITHM);
     cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, iv);
     byte[] original = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
     return new String(original);
 }`}
-                      </code>
-                    </pre>
+                      </pre>
+                    </div>
                   </div>
                 </div>
               </section>

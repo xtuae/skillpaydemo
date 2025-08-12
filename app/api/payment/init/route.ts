@@ -68,19 +68,25 @@ export async function POST(request: NextRequest) {
     const encData = SkillPayCrypto.encrypt(paymentData);
 
     // Make API request to SkillPay
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SKILLPAY_API_URL}/paymentinit`,
-      null,
-      {
-        params: {
-          encData: encData,
-          AuthID: process.env.NEXT_PUBLIC_SKILLPAY_AUTH_ID
-        },
-        headers: {
-          'Content-Type': 'application/json'
+    let response;
+    try {
+      response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SKILLPAY_API_URL}/paymentinit`,
+        null,
+        {
+          params: {
+            encData: encData,
+            AuthID: process.env.NEXT_PUBLIC_SKILLPAY_AUTH_ID
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
-      }
-    );
+      );
+    } catch (error) {
+      console.error('Error during SkillPay API request:', error);
+      throw error;
+    }
 
     console.log('SkillPay API Response:', response.data);
 
